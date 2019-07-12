@@ -1,7 +1,10 @@
-exports.databaseKeys = {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD
-};
+
+// Database information
+exports.host = process.env.DB_HOST;
+exports.port = process.env.DB_PORT;
+exports.user = process.env.DB_USER;
+exports.password = process.env.DB_PASSWORD;
+
+
+
 
