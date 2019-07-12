@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require("inquirer");
@@ -18,5 +18,6 @@ connection.connect(function (err) {
 });
 
 function afterConnection() {
-    concole.log("hello")
+    console.log("hello")
+    connection.end();
 }
