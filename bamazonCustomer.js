@@ -2,6 +2,7 @@ require('dotenv').config();
 var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require('inquirer');
+var divider = "\n--------------------------\n";
 
 var connection = mysql.createConnection({
     host: keys.host,
@@ -20,7 +21,58 @@ connection.connect(function (err) {
 
 function displayAllItems() {
     // logic to display all of the items available for sale. Include the ids, names, and prices of products for sale.
-    // whichitem()
+    inquirer
+        .prompt([
+            // want to enter the store? (Y/N)
+            {
+                name: "start",
+                message: "Do you want to enter the store?",
+                type: "list",
+                choices: [
+                    "Oh yea!",
+                    "No thank you..."
+                ]
+            }
+        ])
+        .then(answer => {
+            switch (answer.start) {
+                case "Oh yea!": 
+                    console.log("get excited!");
+
+                    // display all items
+                    var query = "SELECT * FROM products"
+                    console.log(query);
+
+                    connection.query(query, function (err, res) {
+                        if (err) throw err;
+
+                        res.forEach(element => {
+                            var details = [
+                                "ID: " + element.item_id, 
+                                "Product Name: " + element.product_name, 
+                                "Department: " + element.department_name, 
+                                "Price: $" + element.price, 
+                                "Quantity Available: " + element.stock_quantity
+                            ].join(" | ")
+                            
+                            console.log(details + "\n");
+
+                        });
+                    })
+                    whichitem()
+                    break;
+
+                case "No thank you...": 
+                    console.log(divider + "Well, that's a bummer");
+
+                    connection.end();
+                    break;
+            }
+        });
+    
+}
+
+function showItems() {
     
 }
 
