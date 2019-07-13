@@ -34,8 +34,8 @@ function displayAllItems() {
                 ]
             }
         ])
-        .then(answer => {
-            switch (answer.start) {
+        .then(answers => {
+            switch (answers.start) {
                 case "Oh yea!": 
                     console.log("get excited!");
 
@@ -55,11 +55,14 @@ function displayAllItems() {
                                 "Quantity Available: " + element.stock_quantity
                             ].join(" | ")
                             
-                            console.log(details + "\n");
+                            console.log("\n" + details);
+                            
 
                         });
+                        console.log(divider)
+                        whichItem()
                     })
-                    whichitem()
+                    
                     break;
 
                 case "No thank you...": 
@@ -72,9 +75,6 @@ function displayAllItems() {
     
 }
 
-function showItems() {
-    
-}
 
 function whichItem() {
     // then prompt quesitons:
@@ -84,25 +84,78 @@ function whichItem() {
 
     inquirer
         .prompt([
-            // want to enter the store? (Y/N)
+            {
+                name: "whichID",
+                type: "input",
+                message: "What is the ID of the item you with to buy? (input number)",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "quantityNeeded",
+                type: "input",
+                message: "How many of those would you like? (input number)",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
         ])
         .then(answers => {
+            var ID = answers.whichID;
+            var quantityNeeded = answers.quantityNeeded;
 
+            connection.query("SELECT product_name, stock_quantity FROM products WHERE ?",
+                {
+                    item_id: ID
+                }, function (err, res) {
+                if (err) throw err
+
+                res.forEach(element => {
+                    var amountAvailable = element.stock_quantity;
+                    var product = element.product_name;
+                    checkQuantity(ID, product, quantityNeeded, amountAvailable);
+                })
+                    
+            })
         });
 }
     
-function checkQuantity(item_id, amount) {
+function checkQuantity(ID, product, quantityNeeded, amountAvailable) {
     // check check if your store has enough of the product to meet the customer's request
-    // if success, processOrder(item_id)
+    // if success, processOrder()
     // if not, failedOrder()
+
+    if (amountAvailable >= quantityNeeded) {
+        console.log("Yay! We can fulfill your order for " + quantityNeeded + " " + product + "s!");
+        processOrder(ID, quantityNeeded);
+    }
+    else {
+        var difference = quantityNeeded - amountAvailable
+        failedOrder(product, difference)
+    }
+
 }
 
-function failedOrder() {
-    // log a phrase like Insufficient quantity!, and then prevent the order from going through.
+function failedOrder(product, difference) {
+    console.log(divider);
+    console.log("Drat! Your order failed becuause you want " + difference + " more " + product + "s than we have available right now");
+    console.log("Try placing your order again");
+    console.log(divider);
+
+    // prompt the user to start their order again
+    whichItem()
 }
 
-function processOrder(item_id) {
+function processOrder(ID, quantityNeeded) {
     // Update the SQL database to reflect the remaining quantity.
     // Once the update goes through, show the customer the total cost of their purchase.
+
 }
 
