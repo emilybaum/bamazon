@@ -32,7 +32,7 @@ function enterStore() {
                     "Oh yea!",
                     "No thank you..."
                 ]
-            }
+            }   
         ])
         .then(answers => {
             switch (answers.start) {
@@ -160,16 +160,41 @@ function processOrder(ID, quantityNeeded, amountAvailable, price) {
             newStock, ID
         ], function (err, res) {
             if (err) throw err;
-            console.log("quant needed: " + quantityNeeded);
-            console.log("price: " + price);
+
             var total = quantityNeeded * price;
-            console.log("The total cost is " + total);
-            return true;
+            console.log("The total cost for this purchase is $" + total);
+            // return true;
         })
-    newPurchase()
+    startNewPurchase()
 }
 
-function newPurchase() {
+function startNewPurchase() {
+inquirer
+    .prompt([
+        {
+            name: "newPurchase",
+            message: "Do you want to make annother purchase?",
+            type: "list",
+            choices: [
+                "Oh yea!",
+                "No thank you..."
+            ]
+        }
+    ])
+        .then(answers => {
+            switch (answers.start) {
+                case "Oh yea!":
+                    console.log(divider + "Glad to have you back" + divider);
+                    disaplyAllItems();
+                    break;
+
+                case "No thank you...":
+                    console.log(divider + "Well, that's a bummer");
+
+                    connection.end();
+                    break;
+            }
+        });
 
 }
 
