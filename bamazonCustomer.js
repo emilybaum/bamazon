@@ -15,11 +15,11 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    displayAllItems();
+    enterStore();
 });
 
 
-function displayAllItems() {
+function enterStore() {
     // logic to display all of the items available for sale. Include the ids, names, and prices of products for sale.
     inquirer
         .prompt([
@@ -38,31 +38,7 @@ function displayAllItems() {
             switch (answers.start) {
                 case "Oh yea!": 
                     console.log("get excited!");
-
-                    // display all items
-                    var query = "SELECT * FROM products"
-                    console.log(query);
-
-                    connection.query(query, function (err, res) {
-                        if (err) throw err;
-
-                        res.forEach(element => {
-                            var details = [
-                                "ID: " + element.item_id, 
-                                "Product Name: " + element.product_name, 
-                                "Department: " + element.department_name, 
-                                "Price: $" + element.price, 
-                                "Quantity Available: " + element.stock_quantity
-                            ].join(" | ")
-                            
-                            console.log("\n" + details);
-                            
-
-                        });
-                        console.log(divider)
-                        whichItem()
-                    })
-                    
+                    disaplyAllItems();
                     break;
 
                 case "No thank you...": 
@@ -73,6 +49,33 @@ function displayAllItems() {
             }
         });
     
+}
+
+function disaplyAllItems() {
+
+    // display all items
+    var query = "SELECT * FROM products"
+    console.log(query);
+
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+
+        res.forEach(element => {
+            var details = [
+                "ID: " + element.item_id,
+                "Product Name: " + element.product_name,
+                "Department: " + element.department_name,
+                "Price: $" + element.price,
+                "Quantity Available: " + element.stock_quantity
+            ].join(" | ")
+
+            console.log("\n" + details);
+
+
+        });
+        console.log(divider)
+        whichItem()
+    })
 }
 
 
@@ -163,17 +166,10 @@ function processOrder(ID, quantityNeeded, amountAvailable, price) {
             console.log("The total cost is " + total);
             return true;
         })
+    newPurchase()
+}
 
-    // connection.query("UPDATE products SET stock_quantity=" + newStock + "WHERE item_id=" + ID,
-    //     function (err, res) {
-    //         if (err) throw err;
-    //         var total = quantityNeeded * price
-    //         console.log("The total cost is " + total);
-    //         return true;
-    //     })
-
-    // Update the SQL database to reflect the remaining quantity.
-    // Once the update goes through, show the customer the total cost of their purchase.
+function newPurchase() {
 
 }
 
