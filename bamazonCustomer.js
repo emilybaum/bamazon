@@ -77,11 +77,6 @@ function displayAllItems() {
 
 
 function whichItem() {
-    // then prompt quesitons:
-            // 1. what ID of the product you would like to buy.
-            // 2. how many units of the product they would like to buy
-        // Take answers and feed to checkQuantity(item_id, amount)
-
     inquirer
         .prompt([
             {
@@ -111,7 +106,7 @@ function whichItem() {
             var ID = answers.whichID;
             var quantityNeeded = answers.quantityNeeded;
 
-            connection.query("SELECT product_name, stock_quantity FROM products WHERE ?",
+            connection.query("SELECT product_name, stock_quantity, price FROM products WHERE ?",
                 {
                     item_id: ID
                 }, function (err, res) {
@@ -120,21 +115,22 @@ function whichItem() {
                 res.forEach(element => {
                     var amountAvailable = element.stock_quantity;
                     var product = element.product_name;
-                    checkQuantity(ID, product, quantityNeeded, amountAvailable);
+                    var price = element.price;
+                    console.log("element.price is next");
+                    console.log(price);
+                    console.log(typeof price);
+                    checkQuantity(ID, product, quantityNeeded, amountAvailable, price);
                 })
                     
             })
         });
 }
     
-function checkQuantity(ID, product, quantityNeeded, amountAvailable) {
-    // check check if your store has enough of the product to meet the customer's request
-    // if success, processOrder()
-    // if not, failedOrder()
+function checkQuantity(ID, product, quantityNeeded, amountAvailable, price) {
 
     if (amountAvailable >= quantityNeeded) {
         console.log("Yay! We can fulfill your order for " + quantityNeeded + " " + product + "s!");
-        processOrder(ID, quantityNeeded);
+        processOrder(ID, quantityNeeded, amountAvailable, price);
     }
     else {
         var difference = quantityNeeded - amountAvailable
@@ -153,7 +149,29 @@ function failedOrder(product, difference) {
     whichItem()
 }
 
-function processOrder(ID, quantityNeeded) {
+function processOrder(ID, quantityNeeded, amountAvailable, price) {
+    var newStock = amountAvailable - quantityNeeded;
+    console.log("new stock number: " + newStock);
+    connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?",
+        [
+            newStock, ID
+        ], function (err, res) {
+            if (err) throw err;
+            console.log("quant needed: " + quantityNeeded);
+            console.log("price: " + price);
+            var total = quantityNeeded * price;
+            console.log("The total cost is " + total);
+            return true;
+        })
+
+    // connection.query("UPDATE products SET stock_quantity=" + newStock + "WHERE item_id=" + ID,
+    //     function (err, res) {
+    //         if (err) throw err;
+    //         var total = quantityNeeded * price
+    //         console.log("The total cost is " + total);
+    //         return true;
+    //     })
+
     // Update the SQL database to reflect the remaining quantity.
     // Once the update goes through, show the customer the total cost of their purchase.
 
