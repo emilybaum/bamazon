@@ -23,7 +23,6 @@ function enterStore() {
     // logic to display all of the items available for sale. Include the ids, names, and prices of products for sale.
     inquirer
         .prompt([
-            // want to enter the store? (Y/N)
             {
                 name: "start",
                 message: "Do you want to enter the store?",
@@ -38,7 +37,7 @@ function enterStore() {
             switch (answers.start) {
                 case "Oh yea!": 
                     console.log("get excited!");
-                    disaplyAllItems();
+                    disaplyAllItems(true, whichItem);
                     break;
 
                 case "No thank you...": 
@@ -51,30 +50,35 @@ function enterStore() {
     
 }
 
-function disaplyAllItems() {
+function disaplyAllItems(showDepartment, callback) {
 
     // display all items
     var query = "SELECT * FROM products"
-    console.log(query);
 
     connection.query(query, function (err, res) {
         if (err) throw err;
-
+        
+        
         res.forEach(element => {
             var details = [
                 "ID: " + element.item_id,
                 "Product Name: " + element.product_name,
-                "Department: " + element.department_name,
                 "Price: $" + element.price,
                 "Quantity Available: " + element.stock_quantity
-            ].join(" | ")
+            ]
+            
+            if (showDepartment === true) {
+                details.push("Department: " + element.department_name)
+            }
+
+            details.join(" | ")
 
             console.log("\n" + details);
 
 
         });
         console.log(divider)
-        whichItem()
+        callback()
     })
 }
 
@@ -197,4 +201,6 @@ inquirer
         });
 
 }
+
+module.exports = disaplyAllItems;
 
