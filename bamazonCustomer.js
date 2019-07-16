@@ -63,12 +63,13 @@ function disaplyAllItems(showDepartment, callback) {
             var details = [
                 "ID: " + element.item_id,
                 "Product Name: " + element.product_name,
+                "Department: " + element.department_name,
                 "Price: $" + element.price,
                 "Quantity Available: " + element.stock_quantity
             ]
             
             if (showDepartment === true) {
-                details.push("Department: " + element.department_name)
+                details.push()
             }
 
             details.join(" | ")
