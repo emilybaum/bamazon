@@ -52,7 +52,7 @@ function managerView() {
                     break;
 
                 case "Add New Product":
-                    // addNewProduct();
+                    addNewProduct();
                     // it should allow the manager to add a completely new product to the store.
                     break;
 
@@ -197,18 +197,23 @@ function nextAction() {
         .prompt([
             {
                 name: "addMore",
-                message: "Do you want to update more inventory?",
+                message: "Make more changes?",
                 type: "list",
                 choices: [
-                    "Yes",
+                    "Yes - add more inventory",
+                    "Yes - add more products",
                     "No, take me back to the main menu"
                 ]
             }
         ])
         .then(answers => {
             switch (answers.addMore) {
-                case "Yes":
-                    addToInventory()
+                case "Yes  - add more inventory":
+                    addToInventory();
+                    break;
+
+                case "Yes - add more products":
+                    addNewProduct();
                     break;
 
                 case "No, take me back to the main menu":
@@ -221,8 +226,71 @@ function nextAction() {
 
 function addNewProduct() {
     console.log(divider + "ADD NEW PRODUCT");
-    managerView();
 
+    inquirer
+        .prompt([
+            {
+                name: "productName",
+                message: "Product name: ",
+                type: "input"
+            },
+            {
+                name: "productDepartment",
+                message: "Department name: ",
+                type: "input"
+            },
+            {
+                name: "productPrice",
+                message: "Price for item: ",
+                type: "input",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "productStock",
+                message: "Stock quantity: ",
+                type: "input",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ]).then(answers => {
+            var productName = answers.productName;
+            var productDepartment = answers.productDepartment;
+            var productPrice = answers.productPrice;
+            var productStock = answers.productStock;
+
+            var query = "INSERT INTO products SET ?";
+            
+            connection.query(query, 
+            [
+                {
+                    product_name: productName,
+                    department_name: productDepartment,
+                    price: productPrice,
+                    stock_quantity: productStock
+                }
+            ], function (err, res) {
+            if (err) throw err;
+
+            // console.log("Rows updated in database: " + res.affectedRows);
+
+            })
+
+            console.log(divider);
+            console.log("Product successfully added: " + productName)
+            console.log(divider);
+
+            nextAction()
+
+        })
 }
 
 
