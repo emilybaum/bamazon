@@ -47,7 +47,7 @@ function managerView() {
                     break;
 
                 case "Add to Inventory":
-                    // addToInventory();
+                    addToInventory();
                     // your app should display a prompt that will let the manager "add more" of any item currently in the store.
                     break;
 
@@ -118,15 +118,109 @@ function viewLowInventory() {
 }
 
 
-function addToInventory() {
-    console.log(divider + "ADD TO INVENTORY:");
-    managerView();
 
+function addToInventory() {
+    
+    console.log(divider + "ADD TO INVENTORY");
+
+    inquirer
+        .prompt([
+            {
+                name: "addID",
+                type: "input",
+                message: "What item do you want to add items to?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "addAmount",
+                type: "input",
+                message: "What quantity do you want add for this item?",
+                validate: function (value) {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+        ]).then(answers => {
+            var ID = answers.addID;
+            var addAmount = answers.addAmount;
+
+            connection.query("SELECT stock_quantity FROM products WHERE ?",
+                {
+                    item_id: ID
+                }, function (err, res) {
+                    if (err) throw err
+
+                    res.forEach(element => {
+                        var currentInventory = element.stock_quantity;
+
+                        makeInventoryUpdate(ID, currentInventory, addAmount)
+
+                    })
+                })
+        })
+}
+
+function makeInventoryUpdate(item, currentInventory, addThisAmount) {
+    var ID = item;
+    var amount = parseInt(currentInventory) + parseInt(addThisAmount);
+
+    var query = connection.query("UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity: amount
+            },
+            {
+                item_id: ID
+            }
+        ], function (err, res) {
+            if (err) throw err;
+
+            console.log(divider);
+            console.log("Inventory added: " + addThisAmount + "\n")
+            console.log("Stock quantity updated to " + amount + " for ID: " + ID);
+            console.log(divider);
+
+            nextAction()
+        })
+}
+
+
+function nextAction() {
+    inquirer
+        .prompt([
+            {
+                name: "addMore",
+                message: "Do you want to update more inventory?",
+                type: "list",
+                choices: [
+                    "Yes",
+                    "No, take me back to the main menu"
+                ]
+            }
+        ])
+        .then(answers => {
+            switch (answers.addMore) {
+                case "Yes":
+                    addToInventory()
+                    break;
+
+                case "No, take me back to the main menu":
+                    managerView();
+                    break;
+            }
+        })
 }
 
 
 function addNewProduct() {
-    console.log("add new product");
+    console.log(divider + "ADD NEW PRODUCT");
     managerView();
 
 }

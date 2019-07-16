@@ -37,7 +37,7 @@ function enterStore() {
             switch (answers.start) {
                 case "Oh yea!": 
                     console.log("get excited!");
-                    disaplyAllItems(true, whichItem);
+                    disaplyAllItems();
                     break;
 
                 case "No thank you...": 
@@ -50,7 +50,7 @@ function enterStore() {
     
 }
 
-function disaplyAllItems(showDepartment, callback) {
+function disaplyAllItems() {
 
     // display all items
     var query = "SELECT * FROM products"
@@ -79,7 +79,7 @@ function disaplyAllItems(showDepartment, callback) {
 
         });
         console.log(divider)
-        callback()
+        // callback()
     })
 }
 
@@ -203,5 +203,4 @@ inquirer
 
 }
 
-module.exports = disaplyAllItems;
 
