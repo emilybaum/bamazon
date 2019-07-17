@@ -66,20 +66,14 @@ function disaplyAllItems() {
                 "Department: " + element.department_name,
                 "Price: $" + element.price,
                 "Quantity Available: " + element.stock_quantity
-            ]
-            
-            if (showDepartment === true) {
-                details.push()
-            }
-
-            details.join(" | ")
+            ].join(" | ");
 
             console.log("\n" + details);
 
 
         });
         console.log(divider)
-        // callback()
+        whichItem()
     })
 }
 
