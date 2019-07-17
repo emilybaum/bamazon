@@ -124,7 +124,6 @@ function whichItem() {
                     var amountAvailable = element.stock_quantity;
                     var product = element.product_name;
                     var price = element.price;
-                    console.log("element.price is next");
                     console.log(price);
                     console.log(typeof price);
                     checkQuantity(ID, product, quantityNeeded, amountAvailable, price);
