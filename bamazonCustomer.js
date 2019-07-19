@@ -2,7 +2,7 @@ require('dotenv').config();
 var keys = require("./keys.js");
 var mysql = require("mysql");
 var inquirer = require('inquirer');
-var divider = "\n--------------------------\n";
+var divider = "\n--------------------------------------\n";
 
 var connection = mysql.createConnection({
     host: keys.host,
@@ -36,7 +36,7 @@ function enterStore() {
         .then(answers => {
             switch (answers.start) {
                 case "Oh yea!": 
-                    console.log("get excited!");
+                    console.log("Entering the store...");
                     disaplyAllItems();
                     break;
 
@@ -51,7 +51,7 @@ function enterStore() {
 }
 
 function disaplyAllItems() {
-
+    console.log(divider + "ALL ITEMS IN THE BAMAZON STORE: ")
     // display all items
     var query = "SELECT * FROM products"
 
