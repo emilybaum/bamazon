@@ -19,7 +19,7 @@ Running this applicaiton will propt the user to first enter the *bamazon store, 
 1. Lastly, the user is prompted if they would like to make another order, or exit the store.
 
 
-<!-- Include video of Customer view -->
+![](customer-all-demo.gif)
 
 
 ## Functionality for bamazonManager.js
@@ -30,7 +30,7 @@ Running this applicaiton will propmt the user to select an action:
 * Add to Inventory
 * Add New Product
 
-<!-- INSERT GIF FOR INITIAL CONNECTION -->
+![](manager-start-demo.gif)
 
 ### View Products for Sale
 This option will display all the products in the store with the following info in the terminal:
@@ -39,19 +39,23 @@ This option will display all the products in the store with the following info i
 * Price
 * Quantity Available
 
+![](manager-products-demo.gif)
 <!-- INSERT GIF FOR VIEW PRODUCTS FOR SALE -->
 
 ### View Low Inventory
 This option will display items in the terminal that have an invetory less than 5.
 
+![](manager-low-demo.gif)
 <!-- INSERT GIF FOR VIEW LOW INVENTORY -->
 
 ### Add to Inventory
 This option allows the user to add more inventory of the product that updates the database.
 
+![](manager-inventory-demo.gif)
 <!-- INSERT GIF FOR VIEW LOW INVENTORY -->
 
 ### Add New Product
 This option will allow the user to add a new product to the database of products so that it will be a part of the store.
 
+![](manager-new-demo.gif)
 <!-- INSERT GIF FOR ADD NEW PRODUCT -->

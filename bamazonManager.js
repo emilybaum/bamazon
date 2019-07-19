@@ -182,10 +182,8 @@ function makeInventoryUpdate(item, currentInventory, addThisAmount) {
         ], function (err, res) {
             if (err) throw err;
 
-            console.log(divider);
-            console.log("Inventory added: " + addThisAmount + "\n")
-            console.log("Stock quantity updated to " + amount + " for ID: " + ID);
-            console.log(divider);
+            console.log(divider + "Inventory added: " + addThisAmount + "\n")
+            console.log("Stock quantity updated to " + amount + " for ID: " + ID + divider);
 
             nextAction()
         })
@@ -208,7 +206,7 @@ function nextAction() {
         ])
         .then(answers => {
             switch (answers.addMore) {
-                case "Yes  - add more inventory":
+                case "Yes - add more inventory":
                     addToInventory();
                     break;
 
@@ -284,13 +282,11 @@ function addNewProduct() {
 
             })
 
-            console.log(divider);
-            console.log("Product successfully added: " + productName)
-            console.log(divider);
+            console.log(divider + "Product successfully added: " + productName + divider)
 
             nextAction()
-
         })
+    
 }
 
 

@@ -156,18 +156,18 @@ function failedOrder(product, difference) {
 
 function processOrder(ID, quantityNeeded, amountAvailable, price) {
     var newStock = amountAvailable - quantityNeeded;
-    // console.log("new stock number: " + newStock + "\n");
 
     connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?",
         [
             newStock, ID
         ], function (err, res) {
             if (err) throw err;
-
-            var total = quantityNeeded * price;
-            console.log("The total cost for this purchase is $" + total);
-
         })
+
+    var total = quantityNeeded * price;
+
+    console.log(divider + "The total cost for this purchase is $" + total + divider);
+
     startNewPurchase()
 }
 
@@ -187,7 +187,7 @@ inquirer
         .then(answers => {
             switch (answers.newPurchase) {
                 case "Oh yea!":
-                    console.log(divider + "Glad to have you back" + divider);
+                    console.log(divider + "Commencing another order..." + divider);
                     disaplyAllItems();
                     break;
 
