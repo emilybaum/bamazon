@@ -6,7 +6,6 @@ Input into the command line to enter the application
 * node bamazonCustomer.js
 * node bamazonManager.js
 
-================================================================
 ## Functionality for bamazonCustomer.js 
 ### _Customer View_
 Running this applicaiton will propt the user to first enter the *bamazon store, and then displays all the items in the store within the command line (aka, table details from the mySQL database). The the following happens in order:
@@ -21,7 +20,7 @@ Running this applicaiton will propt the user to first enter the *bamazon store, 
 
 ![](customer-all-demo.gif)
 
-================================================================
+
 ## Functionality for bamazonManager.js
 ### _Manager View_
 Running this applicaiton will propmt the user to select an action:
