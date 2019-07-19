@@ -118,8 +118,7 @@ function whichItem() {
                     var amountAvailable = element.stock_quantity;
                     var product = element.product_name;
                     var price = element.price;
-                    console.log(price);
-                    console.log(typeof price);
+                    
                     checkQuantity(ID, product, quantityNeeded, amountAvailable, price);
                 })
                     
@@ -130,7 +129,11 @@ function whichItem() {
 function checkQuantity(ID, product, quantityNeeded, amountAvailable, price) {
 
     if (amountAvailable >= quantityNeeded) {
+        
+        console.log(divider);
         console.log("Yay! We can fulfill your order for " + quantityNeeded + " " + product + "s!");
+        console.log(divider);
+
         processOrder(ID, quantityNeeded, amountAvailable, price);
     }
     else {
@@ -141,6 +144,7 @@ function checkQuantity(ID, product, quantityNeeded, amountAvailable, price) {
 }
 
 function failedOrder(product, difference) {
+
     console.log(divider);
     console.log("Drat! Your order failed becuause you want " + difference + " more " + product + "s than we have available right now");
     console.log("Try placing your order again");
@@ -152,7 +156,8 @@ function failedOrder(product, difference) {
 
 function processOrder(ID, quantityNeeded, amountAvailable, price) {
     var newStock = amountAvailable - quantityNeeded;
-    console.log("new stock number: " + newStock);
+    // console.log("new stock number: " + newStock + "\n");
+
     connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?",
         [
             newStock, ID
@@ -161,7 +166,7 @@ function processOrder(ID, quantityNeeded, amountAvailable, price) {
 
             var total = quantityNeeded * price;
             console.log("The total cost for this purchase is $" + total);
-            // return true;
+
         })
     startNewPurchase()
 }
@@ -180,7 +185,7 @@ inquirer
         }
     ])
         .then(answers => {
-            switch (answers.start) {
+            switch (answers.newPurchase) {
                 case "Oh yea!":
                     console.log(divider + "Glad to have you back" + divider);
                     disaplyAllItems();

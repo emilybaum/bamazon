@@ -102,7 +102,7 @@ function viewLowInventory() {
         res.forEach(element => {
             var ID = element.item_id;
 
-            if (element.stock_quantity < 20) {
+            if (element.stock_quantity < 5) {
 
                 var details = [
                     "ID: " + element.item_id,
